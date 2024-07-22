@@ -1,20 +1,15 @@
-FROM python:3.9-alpine
+FROM python:3.12-alpine
 
-WORKDIR /opt
+WORKDIR /code
 
-COPY requirements.txt requirements.txt
-COPY main.py main.py
+COPY ./requirements.txt /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-RUN <<EOF
-  python3 -m venv venv
-  . venv/bin/activate
-  pip install --upgrade pip
-  pip install -r requirements.txt
-EOF
+COPY ./main.py /code/main.py
 
 ENV WORKERS 1
-EXPOSE 7878
+EXPOSE 80
 
-STOPSIGNAL SIGINT
+# STOPSIGNAL SIGINT
 
-CMD /opt/venv/bin/gunicorn main:flask_app -b 0.0.0.0:7878 -w $WORKERS --access-logfile -
+CMD fastapi run main.py --proxy-headers --port 80 --workers $WORKERS

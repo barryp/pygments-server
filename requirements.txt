@@ -1,4 +1,3 @@
-Flask==3.0.3
-gunicorn==19.7.1
 Pygments==2.18.0
-jsx-lexer==2.0.1
+fastapi==0.111.1
+pydantic==2.8.2
